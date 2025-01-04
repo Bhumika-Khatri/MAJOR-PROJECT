@@ -1,0 +1,45 @@
+<% layout("/layout/boilerplate") %>
+<div class="row">
+    <div class="col-8 offset-2">
+        <h3>Edit your listing</h3>
+        <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation" enctype="multipart/form-data">
+            <div class="mb-3">
+                <input name="listing[title]" value="<%= listing.title %>" type="text" class="form-control" required />
+                <div class="valid-feedback">Title looks good!</div>
+                <div class="invalid-feedback">Please provide a title.</div>
+            </div>
+    
+            <div class="mb-3">
+                <textarea name="listing[description]" class="form-control" required><%= listing.description %></textarea>
+                <div class="invalid-feedback">Please provide a description.</div>
+            </div>
+
+            <div class="mb-3">
+                Orignal Listing Image<br/>
+                <img src="<%=orignalImageUrl%>" style="width: 150px; height: auto;"/>
+            </div>
+
+            <div class="mb-3">
+                <label for="image" class="form-label">Upload New Image</label>
+                <input name="listing[image]" type="file" class="form-control"/>
+            </div>
+    
+            <div class="mb-3">
+                <input name="listing[price]" value="<%= listing.price %>" type="number" class="form-control" required />
+                <div class="invalid-feedback">Please enter a valid price.</div>
+            </div>
+    
+            <div class="mb-3">
+                <input name="listing[location]" value="<%= listing.location %>" type="text" class="form-control" required />
+                <div class="invalid-feedback">Please provide a location.</div>
+            </div>
+    
+            <div class="mb-3">
+                <input name="listing[country]" value="<%= listing.country %>" type="text" class="form-control" required />
+                <div class="invalid-feedback">Please provide a country.</div>
+            </div>
+            
+            <button type="submit" class="btn btn-dark add-btn">Edit</button>
+        </form>
+    </div>
+</div>
