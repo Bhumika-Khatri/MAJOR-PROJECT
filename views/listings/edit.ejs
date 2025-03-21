@@ -1,45 +1,102 @@
 <% layout("/layout/boilerplate") %>
-<div class="row">
-    <div class="col-8 offset-2">
-        <h3>Edit your listing</h3>
-        <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation" enctype="multipart/form-data">
-            <div class="mb-3">
-                <input name="listing[title]" value="<%= listing.title %>" type="text" class="form-control" required />
-                <div class="valid-feedback">Title looks good!</div>
-                <div class="invalid-feedback">Please provide a title.</div>
-            </div>
+<style>
+    /* Styling for Better Responsiveness */
+    .edit-form-container {
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 10px;
+    }
     
-            <div class="mb-3">
-                <textarea name="listing[description]" class="form-control" required><%= listing.description %></textarea>
-                <div class="invalid-feedback">Please provide a description.</div>
-            </div>
-
-            <div class="mb-3">
-                Orignal Listing Image<br/>
-                <img src="<%=orignalImageUrl%>" style="width: 150px; height: auto;"/>
-            </div>
-
-            <div class="mb-3">
-                <label for="image" class="form-label">Upload New Image</label>
-                <input name="listing[image]" type="file" class="form-control"/>
-            </div>
+    /* Image Preview Styling */
+    .listing-img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 5px;
+        margin-top: 10px;
+    }
     
-            <div class="mb-3">
-                <input name="listing[price]" value="<%= listing.price %>" type="number" class="form-control" required />
-                <div class="invalid-feedback">Please enter a valid price.</div>
-            </div>
+    /* Button Styling */
+    .edit-btn {
+        width: 100%;
+        padding: 10px;
+        font-size: 1.1rem;
+        border-radius: 5px;
+    }
     
-            <div class="mb-3">
-                <input name="listing[location]" value="<%= listing.location %>" type="text" class="form-control" required />
-                <div class="invalid-feedback">Please provide a location.</div>
-            </div>
+    /* Responsive Fixes */
+    @media (max-width: 768px) {
+        .edit-form-container {
+            padding: 15px;
+        }
     
-            <div class="mb-3">
-                <input name="listing[country]" value="<%= listing.country %>" type="text" class="form-control" required />
-                <div class="invalid-feedback">Please provide a country.</div>
+        .edit-btn {
+            font-size: 1rem;
+        }
+    
+        .row .col-md-4, .row .col-md-8 {
+            width: 100%;
+        }
+    }
+    </style>
+    
+    <body>
+        <div class="container mt-3">
+            <div class="edit-form-container shadow">
+                <h2 class="text-center mb-4">Edit Your Listing</h2>
+                
+                <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title</label>
+                        <input type="text" name="listing[title]" value="<%= listing.title %>" class="form-control" required>
+                        <div class="invalid-feedback">Title should be valid!</div>
+                    </div>
+    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea name="listing[description]" class="form-control" required><%= listing.description %></textarea>
+                        <div class="invalid-feedback">Description should be valid!</div>
+                    </div>
+    
+                    <!-- Original Image -->
+                    <div class="mb-3 text-center">
+                        <strong>Original Listing Image</strong><br>
+                        <img src="<%= orignalImageUrl %>" class="listing-img" alt="Listing Image">
+                    </div>
+    
+                    <!-- New Image Upload -->
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Upload New Image</label>
+                        <input type="file" name="listing[image]" class="form-control">
+                    </div>
+    
+                    <!-- Price & Country Row -->
+                    <div class="row">
+                        <div class="mb-3 col-md-4">
+                            <label for="price" class="form-label">Price</label>
+                            <input type="number" value="<%= listing.price %>" name="listing[price]" class="form-control" required>
+                            <div class="invalid-feedback">Price should be valid!</div>
+                        </div>
+    
+                        <div class="mb-3 col-md-8">
+                            <label for="country" class="form-label">Country</label>
+                            <input type="text" value="<%= listing.country %>" name="listing[country]" class="form-control" required>
+                            <div class="invalid-feedback">Country should be valid!</div>
+                        </div>
+                    </div>
+    
+                    <!-- Location Input -->
+                    <div class="mb-3">
+                        <label for="location" class="form-label">Location</label>
+                        <input type="text" value="<%= listing.location %>" name="listing[location]" class="form-control" required>
+                        <div class="invalid-feedback">Location should be valid!</div>
+                    </div>
+    
+                    <!-- Submit Button -->
+                    <button class="btn btn-dark edit-btn">Submit</button>
+                </form>
             </div>
-            
-            <button type="submit" class="btn btn-dark add-btn">Edit</button>
-        </form>
-    </div>
-</div>
+        </div>
+    </body>
+    </html>

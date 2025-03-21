@@ -13,43 +13,79 @@
     display: inline;
     margin-right: 0.5rem;
   }
-  .search-inp{
-    border-radius: 25px;
-    padding: 0.5rem 3rem 0.5rem 3rem;
+  .search-input {
+    border-radius: 50px;  /* Fully rounded input */
+    padding: 0.5rem 1.5rem; 
+    font-size: 1rem;
+    width: 100%;
+    border: 1px solid #ccc;
+}
+
+  @media (max-width: 768px) {
+      .search-input {
+          width: 100%;
+      }
+  
+      .search-btn {
+    border-radius: 50px;  /* Fully rounded button */
+    background-color: #fe424d;
+    color: #fff;
+    padding: 0.5rem 1.5rem;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+}
+
+      .navbar-nav {
+          width: 100%;
+      }
+  
+      .navbar-nav .nav-link {
+          padding: 0.7rem;
+          width: 100%;
+      }
   }
 </style>
 
 
-<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/listings"><i class="fa-solid fa-compass"></i></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
-        <span class="navbar-toggler-icon"></span>
+<nav class="navbar navbar-expand-md navbar-light bg-light border-bottom sticky-top">
+  <div class="container-fluid">
+      <!-- Brand Logo -->
+      <a class="navbar-brand" href="/listings">
+          <i class="fa-regular fa-compass"></i> <b>WanderNest</b>
+      </a>
+
+      <!-- Mobile Toggle Button -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-          <a class="nav-link" href="/listings">Explore</a>
-        </div>
 
+      <!-- Navbar Content -->
+      <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mx-auto">
+              <li class="nav-item"><a class="nav-link" href="/listings">Explore</a></li>
+          </ul>
 
-        <div class="navbar-nav ms-auto">
-          <form class="d-flex" role="search">
-            <input class="form-control me-2 search-inp" type="search" placeholder="Search destinations">
-            <button class="btn btn-search" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
+          <!-- Search Bar -->
+          <form action="/listings/search" method="get" class="d-flex flex-column flex-md-row w-100 px-2">
+              <input class="form-control search-input" type="search" placeholder="Search Destination" name="query">
+              <button class="btn search-btn mt-2 mt-md-0">
+                  <i class="fa-solid fa-magnifying-glass"></i> Search
+              </button>
           </form>
-        </div>
 
-
-        <div class="navbar-nav ms-auto">
-          <a class="nav-link" href="/listings/new">Airbnb your home</a>
-          <% if(!currUser) {%>
-          <a class="nav-link" href="/signup"><b>Sign up</b></a>
-          <a class="nav-link" href="/login"><b>Log in</b></a>
-          <%}%>
-          <% if(currUser) {%>
-          <a class="nav-link" href="/logout"><b>Log out</b></a>
-          <%}%>
-        </div>
+          <!-- Auth Links -->
+          <ul class="navbar-nav ms-auto text-center">
+              <li class="nav-item"><a class="nav-link" href="/listings/new">Airbnb your home</a></li>
+              <% if (!currUser) { %>
+                  <li class="nav-item"><a class="nav-link" href="/signup"><b>Sign up</b></a></li>
+                  <li class="nav-item"><a class="nav-link" href="/login"><b>Log in</b></a></li>
+              <% } else { %>
+                  <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
+              <% } %>
+          </ul>
       </div>
-    </div>
-  </nav>
+  </div>
+</nav>

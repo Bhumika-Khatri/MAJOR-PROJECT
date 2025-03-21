@@ -7,10 +7,9 @@ const ExpressError = require("../utils/ExpressError.js");
 const { isLoggedIn, isOwner } = require("../middleware.js");
 const listingController = require("../controllers/listings.js");
 
-
-const multer=require('multer');
-const {storage}=require("../cloudConfig.js");
-const upload=multer({storage});
+const multer = require("multer");
+const { storage } = require("../cloudConfig.js");
+const upload = multer({ storage });
 
 const validateListing = (req, res, next) => {
     let { error } = listingSchema.validate(req.body);
@@ -28,26 +27,61 @@ router
   .get(wrapAsync(listingController.index))
   .post(
     isLoggedIn,
-    upload.single('listing[image]'),
+    upload.single("listing[image]"),
     validateListing,
-    wrapAsync(listingController.createListing),
+    wrapAsync(listingController.createListing)
   );
 
 // New route
-router
-  .route("/new")
-  .get(isLoggedIn, listingController.renderNewform);
+router.route("/new").get(isLoggedIn, listingController.renderNewform);
 
-// Show, Edit, Update, and Delete routes
+//category route
+router.get("/category/:category", wrapAsync(async (req, res) => {
+  const category = req.params.category;
+  const listings = await Listing.find({ category: category });
+
+  res.render("listings/category", { listings, category });
+}));
+
+//search route
+router.get("/search",wrapAsync( async (req, res) => {
+  const query = req.query.query; // Get the query from the search form
+
+  if (!query) {
+      return res.redirect("/listings"); // If no query, redirect to the homepage
+  }
+
+  try {
+      // Search for listings that match the query (case-insensitive search)
+      const results = await Listing.find({
+          title: { $regex: query, $options: "i" } // Regex search, case insensitive
+      });
+
+      // Render search.ejs with the results and the search query
+      res.render("./listings/search.ejs", {
+          results: results, 
+          query: query
+      });
+  } catch (err) {
+      console.error("Search error:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+  }
+}));
+
+// Show, Edit, Update, and Delete routes (Keep this below category)
 router
-  .route("/:id")
-  .get(wrapAsync(listingController.showListing))
-  .put(isLoggedIn, isOwner, upload.single('listing[image]'),validateListing, wrapAsync(listingController.updateListing))
-  .delete(isLoggedIn, isOwner, wrapAsync(listingController.destroyListing));
+.route("/:id")
+.get(wrapAsync(listingController.showListing))
+.put(
+  isLoggedIn,
+  isOwner,
+  upload.single("listing[image]"),
+  validateListing,
+  wrapAsync(listingController.updateListing)
+)
+.delete(isLoggedIn, isOwner, wrapAsync(listingController.destroyListing));
 
 // Edit form route
-router
-  .route("/:id/edit")
-  .get(isLoggedIn, isOwner, wrapAsync(listingController.renderEditForm));
+router.route("/:id/edit").get(isLoggedIn, isOwner, wrapAsync(listingController.renderEditForm));
 
 module.exports = router;
